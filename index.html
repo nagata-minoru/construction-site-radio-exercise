@@ -276,6 +276,7 @@
   </style>
   <script src="./getWeather.js" defer></script>
   <script src="./config.js" defer></script>
+  <script src="./speakJP.js" defer></script>
 </head>
 <body>
   <div class="container">
@@ -395,6 +396,8 @@
           });
           return;
         }
+
+        speakJP(sections[currentSectionIndex + 1].innerText);
 
         if (currentSectionIndex < sections.length - 1) {
           hideSection(currentSectionIndex);
