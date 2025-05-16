@@ -274,7 +274,8 @@
       }
     }
   </style>
-  <script src="./getWeather.js"></script>
+  <script src="./getWeather.js" defer></script>
+  <script src="./config.js" defer></script>
 </head>
 <body>
   <div class="container">
@@ -308,7 +309,7 @@
     <div class="title-screen" id="section3">
       <div class="section-title">天気・気温と今日の注意事項</div>
       <div class="weather-icon">☀️</div>
-      <p class="narrator-text">「今日は天気が〇〇、気温は〇〇度。暑かったり寒かったりするけん、体調も気にしとこうや。</p>
+      <p class="narrator-text">「今日は天気が<span id="weather-text">〇〇</span>、気温は<span id="temp-text">〇〇</span>度。暑かったり寒かったりするけん、体調も気にしとこうや。</p>
       <p class="narrator-text"><span class="highlight">水分補給はこまめに</span>、休憩も遠慮せんで取ること！</p>
       <p class="narrator-text">熱中症や転倒には特に気をつけていこう。」</p>
     </div>
@@ -376,6 +377,15 @@
 
       // 「次へ」ボタンのクリックイベント
       nextBtn.addEventListener('click', function() {
+        if (currentSectionIndex === sections.length - 1) {
+          // 最後のセクションで「終了」ボタンがクリックされた場合
+          hideSection(currentSectionIndex);
+          currentSectionIndex = 0; // 最初のセクションに戻す
+          showSection(currentSectionIndex);
+          updateProgressBar();
+          return;
+        }
+
         if (currentSectionIndex === 3 && answer.style.opacity === '0') {
           // クイズの答えを表示
           gsap.to(answer, {

@@ -46,7 +46,13 @@ async function getFukuokaHakataWeather(apiKey) {
 // APIキーはOpenWeatherMapのウェブサイトで取得できます: https://openweathermap.org/api
 async function showWeather() {
   try {
-    const apiKey = 'あなたのAPIキーをここに入力';
+    // APIキーを取得
+    const apiKey = window.config.OPENWEATHER_API_KEY;
+
+    if (!apiKey) {
+      throw new Error('環境変数 OPENWEATHER_API_KEY が設定されていません');
+    }
+
     const weatherData = await getFukuokaHakataWeather(apiKey);
 
     console.log('=== 福岡市博多区の天気情報 ===');
@@ -59,6 +65,28 @@ async function showWeather() {
     console.log(`取得時刻: ${weatherData.timestamp}`);
   } catch (error) {
     console.error('エラーが発生しました:', error);
+  }
+}
+
+// DOMContentLoadedイベントで実行
+document.addEventListener('DOMContentLoaded', setWeatherInfo);
+
+/**
+ * 天気情報をDOMに設定する関数
+ */
+async function setWeatherInfo() {
+  try {
+    const weatherData = await getFukuokaHakataWeather(window.config.OPENWEATHER_API_KEY); // 天気情報を取得する関数を呼び出し
+
+    const weatherText = document.getElementById('weather-text');
+    const tempText = document.getElementById('temp-text');
+
+    if (weatherText && tempText) {
+      weatherText.textContent = weatherData.weather;
+      tempText.textContent = Math.round(weatherData.temperature);
+    }
+  } catch (error) {
+    console.error('天気情報の取得に失敗しました:', error);
   }
 }
 
