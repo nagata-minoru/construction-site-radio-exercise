@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工事現場ラジオ体操前の「3分間動画」</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      background-color: #f5f5f5;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    }
+
+    .container {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .safety-tape {
+      position: absolute;
+      height: 30px;
+      width: 120%;
+      left: -10%;
+      background: repeating-linear-gradient(
+        45deg,
+        #ffeb3b,
+        #ffeb3b 20px,
+        #000 20px,
+        #000 40px
+      );
+      transform: rotate(-2deg);
+    }
+
+    .safety-tape.top {
+      top: 15px;
+    }
+
+    .safety-tape.bottom {
+      bottom: 15px;
+    }
+
+    .title-screen {
+      text-align: center;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(2px);
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 900;
+      color: #ff6700;
+      text-shadow: 3px 3px 0 #ffe082;
+      margin-bottom: 20px;
+      line-height: 1.3;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 15px 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ff6700;
+      margin-bottom: 20px;
+      border-bottom: 4px solid #ffeb3b;
+      padding-bottom: 5px;
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 5px 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .narrator-text {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 15px;
+      opacity: 0;
+      transform: translateY(20px);
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 10px 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .highlight {
+      background-color: #ffeb3b;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .emoji {
+      font-size: 28px;
+      vertical-align: middle;
+      margin: 0 5px;
+    }
+
+    .ending {
+      font-size: 32px;
+      font-weight: 900;
+      color: #ff6700;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.8);
+      text-shadow: 2px 2px 0 #ffe082;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .buttons {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .button {
+      padding: 10px 20px;
+      background-color: #ff6700;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+      background-color: #ff8c00;
+    }
+
+    .button:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .hard-hat {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-color: #ffeb3b;
+      border-radius: 50% 50% 0 0;
+      top: -50px;
+      right: 30px;
+      transform: rotate(15deg);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hard-hat:before {
+      content: '';
+      position: absolute;
+      width: 90px;
+      height: 20px;
+      background-color: #ffeb3b;
+      bottom: 0;
+      left: -5px;
+      border-radius: 5px;
+    }
+
+    .weather-icon {
+      font-size: 60px;
+      margin-bottom: 10px;
+      color: #ff6700;
+    }
+
+    .quiz-box {
+      background-color: #f0f8ff;
+      border: 3px dashed #ff6700;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .quiz-box:before {
+      content: "?";
+      position: absolute;
+      top: -25px;
+      right: -15px;
+      background-color: #ff6700;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 900;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .progress-container {
+      position: absolute;
+      bottom: 80px;
+      width: 80%;
+      left: 10%;
+      height: 6px;
+      background-color: #e0e0e0;
+      border-radius: 3px;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background-color: #ff6700;
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        height: auto;
+        min-height: 400px;
+      }
+
+      .title {
+        font-size: 28px;
+      }
+
+      .narrator-text {
+        font-size: 16px;
+      }
+
+      .ending {
+        font-size: 24px;
+      }
+    }
+  </style>
+  <script src="./getWeather.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="safety-tape top"></div>
+    <div class="safety-tape bottom"></div>
+    <div class="hard-hat"></div>
+
+    <!-- タイトル画面 -->
+    <div class="title-screen" id="title-screen">
+      <div class="title">おはようございます！<br>今日も安全第一でいきましょう！</div>
+    </div>
+
+    <!-- セクション1: 朝の挨拶と笑顔チェック -->
+    <div class="title-screen" id="section1">
+      <div class="section-title">朝の挨拶と笑顔チェック</div>
+      <p class="narrator-text">「おはようございます！今日も朝から現場のみんな、よぉ来とるね〜。昨日はちゃんと寝た？顔色どうや？</p>
+      <p class="narrator-text">みんな、まずは隣の人と目を合わせて、<span class="highlight">ニコッと一発</span>、笑顔の確認たい！」</p>
+      <p class="narrator-text"><span class="emoji">😊</span> 「おはよう！」 <span class="emoji">👋</span></p>
+    </div>
+
+    <!-- セクション2: 今日のワンポイント安全確認 -->
+    <div class="title-screen" id="section2">
+      <div class="section-title">今日のワンポイント安全確認</div>
+      <p class="narrator-text">「さて、今日も安全第一！みんな、ヘルメット、手袋、作業靴、ちゃんとチェックしとるや？</p>
+      <p class="narrator-text">現場のルール、もう一回おさらいしとこ。</p>
+      <p class="narrator-text"><span class="highlight">無理せず</span>、<span class="highlight">声かけ合うて</span>、<span class="highlight">分からんことはすぐ聞く</span>。</p>
+      <p class="narrator-text">これが一番大事たい！」</p>
+    </div>
+
+    <!-- セクション3: 天気・気温と今日の注意事項 -->
+    <div class="title-screen" id="section3">
+      <div class="section-title">天気・気温と今日の注意事項</div>
+      <div class="weather-icon">☀️</div>
+      <p class="narrator-text">「今日は天気が〇〇、気温は〇〇度。暑かったり寒かったりするけん、体調も気にしとこうや。</p>
+      <p class="narrator-text"><span class="highlight">水分補給はこまめに</span>、休憩も遠慮せんで取ること！</p>
+      <p class="narrator-text">熱中症や転倒には特に気をつけていこう。」</p>
+    </div>
+
+    <!-- セクション4: ちょっと一言クイズ＆ユーモア -->
+    <div class="title-screen" id="section4">
+      <div class="section-title">ちょっと一言クイズ＆ユーモア</div>
+      <div class="quiz-box">
+        <p class="narrator-text">「ここでナゾナゾたい！</p>
+        <p class="narrator-text">『工事現場で一番声が大きい道具はなんでしょう？』</p>
+      </div>
+      <p class="narrator-text" id="answer">答えは『<span class="highlight">ハンマー</span>（半端ない声＝ハンマー）』やった。</p>
+      <p class="narrator-text">今日も元気に声出していこう！」</p>
+    </div>
+
+    <!-- セクション5: ラジオ体操への誘導 -->
+    <div class="title-screen" id="section5">
+      <div class="section-title">ラジオ体操への誘導</div>
+      <p class="narrator-text">「それじゃあ、体操の時間がやってきたばい！ケガせんよう、しっかり伸ばして、身体も心もシャキッと目覚めさせようや。</p>
+      <p class="narrator-text">みんな、準備はよかね？</p>
+      <p class="narrator-text">それじゃ、ラジオ体操、<span class="highlight">スタート</span>！」</p>
+    </div>
+
+    <!-- エンドカード -->
+    <div class="title-screen" id="ending">
+      <div class="ending">今日も一日、ご安全に！<br>行ってらっしゃい！</div>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="buttons">
+      <button class="button" id="prev-btn">前へ</button>
+      <button class="button" id="next-btn">次へ</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 画面のセクションを取得
+      const sections = [
+        document.getElementById('title-screen'),
+        document.getElementById('section1'),
+        document.getElementById('section2'),
+        document.getElementById('section3'),
+        document.getElementById('section4'),
+        document.getElementById('section5'),
+        document.getElementById('ending')
+      ];
+
+      // ボタン要素と進捗バーを取得
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const progressBar = document.getElementById('progress-bar');
+      const answer = document.getElementById('answer');
+
+      // 現在のセクションのインデックス
+      let currentSectionIndex = 0;
+      answer.style.opacity = 0;
+
+      // 初期表示
+      showSection(currentSectionIndex);
+      updateProgressBar();
+
+      // 「次へ」ボタンのクリックイベント
+      nextBtn.addEventListener('click', function() {
+        if (currentSectionIndex === 3 && answer.style.opacity === '0') {
+          // クイズの答えを表示
+          gsap.to(answer, {
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power2.out'
+          });
+          return;
+        }
+
+        if (currentSectionIndex < sections.length - 1) {
+          hideSection(currentSectionIndex);
+          currentSectionIndex++;
+          showSection(currentSectionIndex);
+          updateProgressBar();
+        }
+      });
+
+      // 「前へ」ボタンのクリックイベント
+      prevBtn.addEventListener('click', function() {
+        if (currentSectionIndex > 0) {
+          hideSection(currentSectionIndex);
+          currentSectionIndex--;
+          showSection(currentSectionIndex);
+          updateProgressBar();
+
+          // クイズセクションに戻った場合、答えを非表示に
+          if (currentSectionIndex === 3) {
+            answer.style.opacity = 0;
+          }
+        }
+      });
+
+      // セクションを表示する関数
+      function showSection(index) {
+        // 他のセクションを非表示にする
+        sections.forEach((section, i) => {
+          if (i !== index) {
+            section.style.display = 'none';
+          }
+        });
+
+        // コンテナの背景画像を更新
+        const container = document.querySelector('.container');
+
+        // セクションに応じた背景画像を設定
+        switch(index) {
+          case 0: // タイトル画面
+            container.style.backgroundImage = "url('./01.png')";
+            break;
+          case 1: // 朝の挨拶
+            container.style.backgroundImage = "url('./02.png')";
+            break;
+          case 2: // 安全確認
+            container.style.backgroundImage = "url('./03.png')";
+            break;
+          case 3: // 天気・気温
+            container.style.backgroundImage = "url('./04.png')";
+            break;
+          case 4: // クイズ
+            container.style.backgroundImage = "url('./05.png')";
+            break;
+          case 5: // ラジオ体操
+            container.style.backgroundImage = "url('./06.png')";
+            break;
+          case 6: // エンディング
+            container.style.backgroundImage = "url('./07.png')";
+            break;
+        }
+
+        // 選択されたセクションを表示する
+        sections[index].style.display = 'flex';
+
+        // アニメーション
+        gsap.to(sections[index], {
+          opacity: 1,
+          duration: 0.8,
+          ease: 'power2.out'
+        });
+
+        // テキストのアニメーション
+        const narratorTexts = sections[index].querySelectorAll('.narrator-text');
+        narratorTexts.forEach((text, i) => {
+          gsap.fromTo(text,
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              delay: i * 0.2,
+              ease: 'power2.out'
+            }
+          );
+        });
+
+        if (index === 0) {
+          // タイトル画面の特別なアニメーション
+          const title = sections[index].querySelector('.title');
+          gsap.fromTo(title,
+            { scale: 0.8, opacity: 0 },
+            {
+              scale: 1,
+              opacity: 1,
+              duration: 1,
+              ease: 'elastic.out(1, 0.3)'
+            }
+          );
+        } else if (index === sections.length - 1) {
+          // エンディングの特別なアニメーション
+          const ending = sections[index].querySelector('.ending');
+          gsap.to(ending, {
+            opacity: 1,
+            scale: 1,
+            duration: 1,
+            ease: 'elastic.out(1, 0.3)'
+          });
+        }
+
+        // ボタンの状態を更新
+        prevBtn.disabled = index === 0;
+        nextBtn.innerHTML = index === sections.length - 1 ? '終了' : '次へ';
+      }
+
+      // セクションを非表示にする関数
+      function hideSection(index) {
+        gsap.to(sections[index], {
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.in'
+        });
+      }
+
+      // 進捗バーを更新する関数
+      function updateProgressBar() {
+        const progress = (currentSectionIndex / (sections.length - 1)) * 100;
+        progressBar.style.width = progress + '%';
+      }
+
+      // 安全テープのアニメーション
+      const safetyTapes = document.querySelectorAll('.safety-tape');
+      safetyTapes.forEach(tape => {
+        gsap.to(tape, {
+          left: '0%',
+          duration: 15,
+          repeat: -1,
+          ease: 'linear'
+        });
+      });
+
+      // ヘルメットのアニメーション
+      const hardHat = document.querySelector('.hard-hat');
+      gsap.to(hardHat, {
+        rotation: 25,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power1.inOut'
+      });
+    });
+  </script>
+</body>
+</html>
